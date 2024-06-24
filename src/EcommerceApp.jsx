@@ -1,18 +1,29 @@
-import { Menu } from "./components/Menu"
-import { NavBar } from "./components/NavBar"
-import { TarjetaProductos1 } from "./components/TarjetaProductos1"
+import { Header } from "./components/Header"
 import { TarjetaProductos2 } from "./components/TarjetaProductos2"
 import { Footer } from "./components/Footer"
-
+import { Menu } from "./components/Menu";
+import Carousel from "./components/Carousel";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { TiendaScreen } from "./routes/TiendaScreen";
+import { ContactoScreen } from "./routes/ContactoScreen";
+import { HomeScreen } from "./routes/HomeScreen";
+import { LogInScreen } from "./routes/LogInScreen";
 export const EcommerceApp = () => {
   return (
-    <>
-    <NavBar></NavBar>
-    <Menu></Menu>
-    <TarjetaProductos1></TarjetaProductos1>
-    <TarjetaProductos2></TarjetaProductos2>
-    <Footer></Footer>
-    </>
-    )
+    <main className="px-4 pt-6 bg-white">
+      <Header></Header>
+      <Menu></Menu>
+        <Routes>
+          <Route path="/" element={<HomeScreen />} />
+          <Route path="/home" element={<HomeScreen />} />
+          <Route path="/tienda" element={<TiendaScreen />} />
+          <Route path="/contacto" element={<ContactoScreen />} />
+          <Route path="/login" element={<LogInScreen />} />
+          <Route path="/*" element={<Navigate to='/' />} />
+        </Routes>
+      
+      <Footer></Footer>
+    </main>
+  )
 }
 

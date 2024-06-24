@@ -2,9 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { EcommerceApp } from './EcommerceApp'
 import './index.css'
+import { BrowserRouter } from 'react-router-dom'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <EcommerceApp></EcommerceApp>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <React.StrictMode>
+      <EcommerceApp></EcommerceApp>
+    </React.StrictMode>,
+  </BrowserRouter>
 )
