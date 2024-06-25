@@ -1,11 +1,9 @@
-import { ContactoForm } from "../forms/ContactoForm"
+import { ContactForm } from "../forms/ContactForm"
 
 export const ContactoScreen = () => {
   return (
     <>
-      
-
-      <ContactoForm></ContactoForm>
+      <ContactForm></ContactForm>
     </>
   )
 }

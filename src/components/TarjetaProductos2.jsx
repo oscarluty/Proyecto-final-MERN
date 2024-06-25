@@ -4,15 +4,15 @@ import abrigosData from '../data/abrigosData';
 import remerasData from '../data/remerasData';
 
 const Article = ({ imgSrc, title, text }) => (
-  <article className='max-w-80 cursor-pointer relative block overflow-hidden rounded-2xl'>
-    <figure className='w-full	h-52	overflow-hidden	'>
-      <img className='max-w-full origin-center h-full	aspect-video overflow-hidden object-cover' src={imgSrc} alt="Preview" />
+  <article className='w-64 cursor-pointer relative block overflow-hidden rounded-2xl'>
+    <figure className='w-full h-96 overflow-hidden'>
+      <img className='w-full h-full object-cover' src={imgSrc} alt="Preview" />
     </figure>
-    <div className="p-6 bg-white">
-      <h2 className='mb-4	text-2xl'>{title}</h2>
-      <p>
+    <div className="p-4 bg-white">
+      <h2 className='mb-2 text-xl'>{title}</h2>
+      <p className='text-sm'>
         {text}
-        <a href="#" className="inline-flex text-slate-400" title="Read More">
+        <a href="#" className="inline-flex text-slate-400 mt-2" title="Read More">
           Comprar 🛒
         </a>
       </p>
@@ -22,10 +22,10 @@ const Article = ({ imgSrc, title, text }) => (
 
 export const TarjetaProductos2 = () => (
   <div className="w-full flex justify-center items-start p-8">
-    <div className="articles flex flex-wrap m-auto justify-center max-w-6xl gap-6">
+    <div className="articles grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl">
       {camperasData.map((article, index) => (
         <Article
-          key={index}
+          key={`campera-${index}`}
           imgSrc={article.imgSrc}
           title={article.title}
           text={article.text}
@@ -33,7 +33,7 @@ export const TarjetaProductos2 = () => (
       ))}
       {abrigosData.map((article, index) => (
         <Article
-          key={index}
+          key={`abrigo-${index}`}
           imgSrc={article.imgSrc}
           title={article.title}
           text={article.text}
@@ -41,7 +41,7 @@ export const TarjetaProductos2 = () => (
       ))}
       {remerasData.map((article, index) => (
         <Article
-          key={index}
+          key={`remera-${index}`}
           imgSrc={article.imgSrc}
           title={article.title}
           text={article.text}
