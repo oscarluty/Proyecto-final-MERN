@@ -1,13 +1,21 @@
-import React from 'react';
+import { useForm } from "react-hook-form";
+import { registerRequest } from "../api/auth";
 
 const LoginForm = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const onSubmit = handleSubmit(async (values) => {
+    const res = await registerRequest(values);
+    console.log(res);
+  })
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-col md:flex-row gap-8">
         {/* Formulario de Registro */}
         <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-6 text-center">Registro</h2>
-          <form>
+          <form onSubmit={onSubmit}>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
                 Nombre de Usuario
@@ -16,6 +24,7 @@ const LoginForm = () => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="username"
                 type="text"
+                {...register("username", { required: true })}
                 placeholder="Nombre de Usuario"
               />
             </div>
@@ -27,6 +36,7 @@ const LoginForm = () => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="email"
                 type="email"
+                {...register("email", { required: true })}
                 placeholder="Correo Electrónico"
               />
             </div>
@@ -38,13 +48,14 @@ const LoginForm = () => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 id="password"
                 type="password"
+                {...register("password", { required: true })}
                 placeholder="******************"
               />
             </div>
             <div className="flex items-center justify-between">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button"
+                type="submit"
               >
                 Registrarse
               </button>
