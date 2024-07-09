@@ -1,10 +1,22 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    username: {
+    nombre: {
         type: String,
         required: true,
         trim: true,
+    },
+    apellido: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    telefono: {
+        type: Number,
+        required: true,
+        min: 1000000,
+        max: 99999999999,
+        unique: true,
     },
     email: {
         type: String,

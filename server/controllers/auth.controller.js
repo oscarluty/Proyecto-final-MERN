@@ -5,15 +5,22 @@ import bcrypt from 'bcryptjs'
 import { createAccessToken } from '../libs/jwt.js';
 
 export const register = async (req, res) => {
-    const { email, password, username } = req.body
+    const { email, password, nombre, apellido, telefono } = req.body
 
     try {
+
+        const userFound = await User.findOne({ email });
+        if (userFound) 
+            return res.status(400).json(['El email ya está registrado']);
+
 
         const passwordHash = await bcrypt.hash(password, 10)
 
         const newUser = new User({
             email,
-            username,
+            nombre,
+            apellido,
+            telefono,
             password: passwordHash,
         });
 
@@ -23,7 +30,9 @@ export const register = async (req, res) => {
         res.cookie('token', token);
         res.json({
             id: userSaved._id,
-            username: userSaved.username,
+            nombre: userSaved.nombre,
+            apellido: userSaved.apellido,
+            telefono: userSaved.telefono,
             email: userSaved.email,
             rol: userSaved.rol,
             createdAt: newUser.createdAt,
@@ -35,11 +44,11 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-    const { password, username } = req.body
+    const { email, password } = req.body
 
     try {
 
-        const unserFound = await User.findOne({username}) 
+        const unserFound = await User.findOne({email}) 
 
         if (!unserFound) {
             return res.status(400).json({ message: 'Usuario no encontrado' })
@@ -72,6 +81,7 @@ export const logout = (req, res) => {
         expires: new Date(0),
     });
     return res.sendStatus(200);
+    console.log('se cerró la sesion');
 }
 
 export const profile = async (req, res) => {

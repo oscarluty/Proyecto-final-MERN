@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import LoginForm from '../forms/LogInForm'
+import RegisterForm from '../forms/RegisterForm';
 
 export const LogInScreen = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -9,6 +10,9 @@ export const LogInScreen = () => {
     setIsDropdownOpen(!isDropdownOpen)
   }
   return (
-    <LoginForm />
+    <div className="flex items-center justify-center ">
+      <LoginForm />
+    </div>
+    
   )
 }
