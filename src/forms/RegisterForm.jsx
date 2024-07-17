@@ -7,13 +7,12 @@ import { Link } from "react-router-dom";
 
 const RegisterForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { signup, isAuthenticated, setIsAuthenticated, errors: registerErrors } = useAuth();
+  const { signup, isAuthenticated, errors: registerErrors } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/login");
-      setIsAuthenticated(false);
     }
   }, [isAuthenticated, navigate]);
 

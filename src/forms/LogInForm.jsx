@@ -17,7 +17,6 @@ const LoginForm = () => {
 
   const onSubmit = handleSubmit((data) => {
     signin(data);
-    setIsAuthenticated(true);
   });
 
   return (
