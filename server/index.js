@@ -1,6 +1,7 @@
 import app from './app.js'
 import { connectDB } from './db.js';
+import { PORT } from './config.js';
 
 connectDB();
-app.listen(4000)
-console.log('escuchando en el puerto', 4000);
+app.listen(PORT)
+console.log('escuchando en el puerto', PORT);
