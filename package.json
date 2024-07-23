@@ -9,7 +9,7 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "start": "node server/index.js",
-    "heroku-postbuild": "npm run install-client && npm run build"
+    "heroku-postbuild": "npm install && npm run build"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
