@@ -1,6 +1,9 @@
 export const PORT = process.env.PORT || 4000;
 export const TOKEN_SECRET = process.env.TOKEN_SECRET || 'some_secret_key_muy_seguro_y_largo';
 export const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://oscarluty:J67lA0E9zlBFzCqb@arrierocluster.elbacgd.mongodb.net/arrierodb';
+export const CLOUDINARY_CLOUD_NAME="ds4nocmrq"
+export const CLOUDINARY_API_KEY="173916534494719"
+export const CLOUDINARY_API_SECRET="c9TJmvKyrsY8GKlUwql5MvGYEg0"
 
 export const isProduction = process.env.NODE_ENV === 'production';
 

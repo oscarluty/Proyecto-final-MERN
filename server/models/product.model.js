@@ -18,9 +18,9 @@ const productSchema = new mongoose.Schema({
         ref: 'Marca',
         required: true,
     },
-    subcategoria: {
+    categoria: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Subcategoria',
+        ref: 'categoria',
         required: true,
     }
 }, {
