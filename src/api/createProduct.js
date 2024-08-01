@@ -1,10 +1,9 @@
-// api.js
 
 import { API_URL } from "../config";
 
 export const createProduct = async (productData) => {
     try {
-      const response = await fetch('http://localhost:4000/api/products', {
+      const response = await fetch(API_URL+'/products', {
         method: 'POST',
         body: productData,
       });

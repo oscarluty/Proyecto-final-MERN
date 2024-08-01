@@ -11,6 +11,7 @@ import tasksRoutes from "./routes/tasks.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import marcasRoutes from "./routes/marcas.routes.js";
 import categoriaRoutes from "./routes/categoria.routes.js";
+import carruselRoutes from "./routes/carrusel.routes.js";
 import { FRONTEND_URL, isProduction } from "./config.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -38,6 +39,7 @@ app.use("/api", tasksRoutes);
 app.use("/api", productRoutes);
 app.use("/api", marcasRoutes);
 app.use("/api", categoriaRoutes);
+app.use("/api", carruselRoutes);
 
 // Serve static files in production
 if (isProduction) {

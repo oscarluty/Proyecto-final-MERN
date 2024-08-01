@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchProducts } from '../api/fetchProduct';
+import { fetchProducts } from '../fetch/fetchProduct';
 
 const Article = ({ imagen, nombre, descripcion }) => (
   <article className='w-64 cursor-pointer relative block overflow-hidden rounded-2xl'>
