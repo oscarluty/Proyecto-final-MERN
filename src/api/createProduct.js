@@ -1,5 +1,7 @@
 // api.js
 
+import { API_URL } from "../config";
+
 export const createProduct = async (productData) => {
     try {
       const response = await fetch('http://localhost:4000/api/products', {
@@ -20,7 +22,7 @@ export const createProduct = async (productData) => {
 
   export const fetchMarcas = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/marcas');
+      const response = await fetch(API_URL+'/marcas');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -33,7 +35,7 @@ export const createProduct = async (productData) => {
   
   export const fetchCategorias = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/categorias');
+      const response = await fetch(API_URL+'/categorias');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
