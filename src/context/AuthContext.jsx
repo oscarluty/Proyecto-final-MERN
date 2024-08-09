@@ -28,34 +28,55 @@ export const AuthProvider = ({ children }) => {
     }, [errors]);
 
     const signup = async (user) => {
-        try {
-          const res = await registerRequest(user);
-          if (res.status === 200) {
-            setUser(res.data);
-            setIsAuthenticated(true);
-          }
-        } catch (error) {
-          console.log(error.response.data);
-          setErrors(error.response.data.message);
-        }
-      };
-
-      const signin = async (user) => {
-        try {
-          const res = await loginRequest(user);
+      try {
+        const res = await registerRequest(user);
+        if (res.status === 200) {
           setUser(res.data);
           setIsAuthenticated(true);
-        } catch (error) {
-          console.log(error);
-          // setErrors(error.response.data.message);
+          setErrors([]);
         }
-      };
+      } catch (error) {
+        console.error('Error durante el registro:', error);
+        if (error.response && error.response.data) {
+          if (typeof error.response.data === 'string') {
+            setErrors([error.response.data]);
+          } else if (Array.isArray(error.response.data)) {
+            setErrors(error.response.data);
+          } else if (typeof error.response.data === 'object' && error.response.data.message) {
+            setErrors([error.response.data.message]);
+          } else {
+            setErrors(['Ocurrió un error durante el registro']);
+          }
+        } else {
+          setErrors(['Ocurrió un error durante el registro']);
+        }
+      }
+    };
+
+    const signin = async (user) => {
+        try {
+            const res = await loginRequest(user);
+            setUser(res.data);
+            setIsAuthenticated(true);
+            setErrors([]);
+        } catch (error) {
+            console.log(error);
+            if (error.response && error.response.data) {
+                setErrors(Array.isArray(error.response.data.message)
+                    ? error.response.data.message
+                    : [error.response.data.message]);
+            } else {
+                setErrors(["Ha ocurrido un error. Por favor, intenta de nuevo."]);
+            }
+        }
+    };
 
     const logout = () => {
         Cookies.remove("token");
         setUser(null);
         setIsAuthenticated(false);
-      };
+        setErrors([]);
+    };
 
     useEffect(() => {
         const checkLogin = async () => {
@@ -83,18 +104,18 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
-          value={{
-            user,
-            signup,
-            signin,
-            logout,
-            isAuthenticated,
-            isAdmin,
-            errors,
-            loading,
-          }}
+            value={{
+                user,
+                signup,
+                signin,
+                logout,
+                isAuthenticated,
+                isAdmin,
+                errors,
+                loading,
+            }}
         >
-          {children}
+            {children}
         </AuthContext.Provider>
-      );
-    };
+    );
+};

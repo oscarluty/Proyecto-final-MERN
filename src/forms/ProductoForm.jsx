@@ -1,46 +1,101 @@
 import React, { useState, useEffect } from 'react'
-import { createProduct, fetchCategorias, fetchMarcas } from '../api/createProduct'
+import { useLocation, useNavigate } from 'react-router-dom';
+import { createProduct, fetchCategorias, fetchMarcas, fetchTipos, updateProduct } from '../api/createProduct'
+import eventEmitter from '../api/eventEmitter';
 
 const ProductoForm = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const editingProduct = location.state?.editingProduct;
+
   const [formData, setFormData] = useState({
     nombre: '',
     descripcion: '',
     imagen: null,
     marca: '',
-    categoria: ''
+    categoria: '',
+    tipo: ''
   })
   const [previewImage, setPreviewImage] = useState(null)
   const [marcas, setMarcas] = useState([])
   const [categorias, setCategorias] = useState([])
+  const [tipos, setTipos] = useState([])
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
-    const loadMarcasYCategorias = async () => {
+    if (editingProduct) {
+      setFormData({
+        nombre: editingProduct.nombre,
+        descripcion: editingProduct.descripcion,
+        imagen: null,
+        marca: editingProduct.marca,
+        categoria: editingProduct.categoria,
+        tipo: editingProduct.tipo
+      });
+      setPreviewImage(editingProduct.imagen);
+    }
+    else {
+      setFormData({
+        nombre: '',
+        descripcion: '',
+        imagen: null,
+        marca: '',
+        categoria: '',
+        tipo: ''
+      });
+      setPreviewImage(null);
+    }
+
+    const loadMarcasCategoriasYTipos = async () => {
       try {
-        const [marcasData, categoriasData] = await Promise.all([
+        const [marcasData, categoriasData, tiposData] = await Promise.all([
           fetchMarcas(),
-          fetchCategorias()
+          fetchCategorias(),
+          fetchTipos()
         ]);
         setMarcas(marcasData);
         setCategorias(categoriasData);
+        setTipos(tiposData);
       } catch (err) {
-        setError('Error al cargar marcas y categorías: ' + err.message);
+        setError('Error al cargar marcas, categorías y tipos: ' + err.message);
       }
     };
 
-    loadMarcasYCategorias();
-  }, [])
+    loadMarcasCategoriasYTipos();
+
+    const handleNewMarca = (newMarca) => {
+      setMarcas(prevMarcas => [...prevMarcas, newMarca]);
+    };
+
+    const handleNewCategoria = (newCategoria) => {
+      setCategorias(prevCategorias => [...prevCategorias, newCategoria]);
+    };
+
+    const handleNewTipo = (newTipo) => {
+      setTipos(prevTipos => [...prevTipos, newTipo]);
+    };
+
+    eventEmitter.subscribe('newMarca', handleNewMarca);
+    eventEmitter.subscribe('newCategoria', handleNewCategoria);
+    eventEmitter.subscribe('newTipo', handleNewTipo);
+
+    return () => {
+      eventEmitter.unsubscribe('newMarca', handleNewMarca);
+      eventEmitter.unsubscribe('newCategoria', handleNewCategoria);
+      eventEmitter.unsubscribe('newTipo', handleNewTipo);
+    }
+
+  }, [editingProduct])
 
   const handleChange = (e) => {
     if (e.target.name === 'imagen') {
       const file = e.target.files[0];
-      setFormData({...formData, imagen: file});
+      setFormData({ ...formData, imagen: file });
 
-      // Crear URL para vista previa
       const reader = new FileReader();
-      reader.onloaded = () => {
-        setPreviewImage(reader.result);
+      reader.onload = (event) => {
+        setPreviewImage(event.target.result);
       }
       reader.readAsDataURL(file);
     } else {
@@ -49,36 +104,53 @@ const ProductoForm = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError(null)
-    setSuccess(false)
+    e.preventDefault();
+    setError(null);
+    setSuccess(false);
     try {
       const formDataToSend = new FormData();
-      for (const key in formData) {
-        formDataToSend.append(key, formData[key]);
+      formDataToSend.append('nombre', formData.nombre);
+      formDataToSend.append('descripcion', formData.descripcion);
+      formDataToSend.append('marca', formData.marca);
+      formDataToSend.append('categoria', formData.categoria);
+      formDataToSend.append('tipo', formData.tipo);
+      if (formData.imagen) {
+        formDataToSend.append('imagen', formData.imagen);
       }
-      
-      const newProduct = await createProduct(formDataToSend)
-      console.log('Producto creado:', newProduct)
-      setSuccess(true)
+
+      let result;
+      if (editingProduct) {
+        result = await updateProduct(editingProduct._id, formDataToSend);
+        console.log('Producto actualizado:', result);
+      } else {
+        result = await createProduct(formDataToSend);
+        console.log('Producto creado:', result);
+      }
+
+      setSuccess(true);
       setFormData({
         nombre: '',
         descripcion: '',
         imagen: null,
         marca: '',
-        categoria: ''
-      })
-      setPreviewImage(null)
+        categoria: '',
+        tipo: ''
+      });
+      setPreviewImage(null);
+
+      setTimeout(() => {
+        navigate('/mantenimiento');
+      }, 1000);
     } catch (err) {
-      setError('Error al crear el producto: ' + err.message)
+      setError(`Error al ${editingProduct ? 'actualizar' : 'crear'} el producto: ` + err.message);
     }
-  }
+  };
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h2 className="text-2xl font-bold mb-5">Registro de Producto</h2>
+    <div className="bg-slate-200 p-4 max-w-md mx-auto mt-10 rounded-lg">
+      <h2 className="text-2xl font-bold mb-5">{editingProduct ? 'Editar' : 'Registro de'} Producto</h2>
       {error && <p className="text-red-500 mb-4">{error}</p>}
-      {success && <p className="text-green-500 mb-4">Producto creado con éxito!</p>}
+      {success && <p className="text-green-500 mb-4">Producto {editingProduct ? 'actualizado' : 'creado'} con éxito!</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">Nombre:</label>
@@ -151,15 +223,31 @@ const ProductoForm = () => {
             ))}
           </select>
         </div>
-        <button 
+        <div>
+          <label htmlFor="tipo" className="block text-sm font-medium text-gray-700">Tipo:</label>
+          <select
+            id="tipo"
+            name="tipo"
+            value={formData.tipo}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          >
+            <option value="">Seleccione un tipo</option>
+            {tipos.map((t) => (
+              <option key={t._id} value={t._id}>{t.nombre}</option>
+            ))}
+          </select>
+        </div>
+        <button
           type="submit"
           className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Registrar Producto
+          {editingProduct ? 'Actualizar' : 'Registrar'} Producto
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
 export default ProductoForm

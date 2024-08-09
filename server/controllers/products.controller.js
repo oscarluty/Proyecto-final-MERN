@@ -17,17 +17,18 @@ export const createProduct = async (req, res) => {
         console.log("Cuerpo de la solicitud:", req.body);
         console.log("Archivo subido:", req.file);
   
-        const { nombre, descripcion, marca, categoria } = req.body;
+        const { nombre, descripcion, marca, categoria, tipo } = req.body;
         const imagen = req.file ? req.file.path : null;
   
-        console.log("Datos a guardar:", { nombre, descripcion, marca, categoria, imagen });
+        console.log("Datos a guardar:", { nombre, descripcion, marca, categoria, imagen, tipo });
   
         const newProduct = new Product({
           nombre,
           descripcion,
           imagen,
           marca,
-          categoria
+          categoria,
+          tipo
         });
   
         console.log("Modelo de producto creado:", newProduct);
@@ -59,9 +60,28 @@ export const deleteProduct = async (req, res) => {
     return res.sendStatus(204);  // Devuelve el producto eliminado en formato JSON  //  //  //
 };
 
-export const updateProduct = async (req, res) => { 
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!product) return res.status(404).json({message: 'Product not found'})
-    res.json(product);  // Devuelve el producto actualizado en formato JSON  //  //  //
+export const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, descripcion, marca, categoria, tipo } = req.body;
+    
+    let updateData = { nombre, descripcion, marca, categoria, tipo };
+
+    // Si se envió una nueva imagen, actualizarla
+    if (req.file) {
+      updateData.imagen = req.file.path;
+    }
+
+    const product = await Product.findByIdAndUpdate(id, updateData, { new: true });
+    
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.json(product);
+  } catch (error) {
+    console.error('Error updating product:', error);
+    res.status(500).json({ message: 'Error updating product', error: error.message });
+  }
 };
 

@@ -11,20 +11,26 @@ const AdminScreen = () => {
                         Usuarios
                     </button>
                 </Link>
-                <Link to="/productos" className="text-decoration-none">
+                <Link to='/mantenimiento'>
+                    <button className="w-full p-6 text-xl font-bold text-white bg-slate-600 rounded-lg hover:bg-slate-700 transition-colors">
+                        Mantenimiento
+                    </button>
+                </Link>
+                <Link to="/registros" className="text-decoration-none">
                     <button className="w-full p-6 text-xl font-bold text-white bg-slate-600 rounded-lg hover:bg-slate-700 transition-colors">
                         Registros
                     </button>
                 </Link>
-                <button className="w-full p-6 text-xl font-bold text-white bg-slate-600 rounded-lg hover:bg-slate-700 transition-colors">
-                    Botón 3
-                </button>
-                <button className="w-full p-6 text-xl font-bold text-white bg-slate-600 rounded-lg hover:bg-slate-700 transition-colors">
-                    Botón 4
-                </button>
-                <button className="w-full p-6 text-xl font-bold text-white bg-slate-600 rounded-lg hover:bg-slate-700 transition-colors">
-                    Botón 5
-                </button>
+                <Link to="/carrusel" className="text-decoration-none">
+                    <button className="w-full p-6 text-xl font-bold text-white bg-slate-600 rounded-lg hover:bg-slate-700 transition-colors">
+                        Carrusel
+                    </button>
+                </Link>
+                <Link to="/vista" className="text-decoration-none">
+                    <button className="w-full p-6 text-xl font-bold text-white bg-slate-600 rounded-lg hover:bg-slate-700 transition-colors">
+                        Mensajes de usuarios
+                    </button>
+                </Link>
                 <button className="w-full p-6 text-xl font-bold text-white bg-slate-600 rounded-lg hover:bg-slate-700 transition-colors">
                     Botón 6
                 </button>

@@ -1,55 +1,91 @@
-import { useForm } from "react-hook-form"
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { createContacto } from '../api/createContacto';
+import eventEmitter from '../api/eventEmitter';
 
-export const ContactoForm = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm()
+export const ContactForm = () => {
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-    const customSubmit = (data) => {
-        console.log(data)
+  const onSubmit = async (data) => {
+    setError(null);
+    setSuccess(false);
+    try {
+        console.log('Datos que se envían:', data); // Verifica los datos que se están enviando
+        const newContacto = await createContacto(data);
+        console.log('Respuesta de la API:', newContacto); // Verifica la respuesta de la API
+        setSuccess(true);
+        reset();
+        eventEmitter.dispatch('newContacto', newContacto);
+    } catch (err) {
+        console.log('Error en la solicitud:', err);
+        setError('Error al crear el contacto: ' + err.message);
     }
-    return (
-        <>
-            <h2 className="p-1 font-semibold">Contacto</h2>
-            <form onSubmit={handleSubmit(customSubmit)}>
-                <div className="p-1 grid grid-cols-2">
-                    <div className="p-1">
-                        <ul>
-                            <li className="p-1">
-                                <input type="text" className="bg-neutral-200 rounded" placeholder="Nombre" {...register('name')} />
-                            </li>
-                            <li className="p-1">
-                                <input type="text" className="bg-neutral-200 rounded" placeholder="Email" {...register('name')} />
-                            </li>
-                            <li className="p-1">
-                                <input type="number" className="bg-neutral-200 rounded" placeholder="Telefono" {...register('name')} />
-                            </li>
-                            <li className="p-1">
-                                <textarea className="bg-neutral-200 rounded"
-                                    id="w3review"
-                                    name="w3review"
-                                    rows={4}
-                                    cols={50}
-                                    placeholder="Mensaje"
+};
 
-                                />
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="p-1 ml-10">
-                        <p className="ml-20">
-                            En Jean Vernier nos interesa escuchar a todos nuestros clientes. Nuestro objetivo es ofrecer el mejor servicio, para ello te solicitamos que nos acerques tus consultas, sugerencias y reclamos completando el siguiente formulario:
+  return (
+    <div className="max-w-md mx-auto mt-8">
+      <h2 className="text-2xl font-bold mb-5">Formulario de Contacto</h2>
+      {error && <p className="text-red-500 mb-4">{error}</p>}
+      {success && <p className="text-green-500 mb-4">¡Contacto creado con éxito!</p>}
+      <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+            Nombre:
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="name"
+            type="text"
+            placeholder="Tu nombre"
+            {...register("name", { required: "Este campo es requerido" })}
+          />
+          {errors.name && <p className="text-red-500 text-xs italic">{errors.name.message}</p>}
+        </div>
 
-                            Shopping Pinedo – Local 31
-                            Avenida Mariscal López y 26 de Febrero
-                            San Lorenzo, Paraguay.
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+            Email:
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            type="email"
+            placeholder="tu@email.com"
+            {...register("email", { 
+              required: "Este campo es requerido", 
+              pattern: { 
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, 
+                message: "Email inválido" 
+              } 
+            })}
+          />
+          {errors.email && <p className="text-red-500 text-xs italic">{errors.email.message}</p>}
+        </div>
 
-                            +595 994 441 058
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="message">
+            Mensaje:
+          </label>
+          <textarea
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32"
+            id="message"
+            placeholder="Tu mensaje"
+            {...register("message", { required: "Este campo es requerido" })}
+          />
+          {errors.message && <p className="text-red-500 text-xs italic">{errors.message.message}</p>}
+        </div>
 
-                            ventas@jeanvernier.com.py
-                        </p>
-                    </div>
-                </div>
-            </form>
-
-        </>
-    )
-}
+        <div className="flex items-center justify-between">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Enviar
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};

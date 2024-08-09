@@ -1,9 +1,9 @@
-import React from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const Menu = () => {
   return (
-    <section >
+    <section className=" sm:block">
       <hr />
       <ul className="bg-white flex place-content-center items-center space-x-2">
         <li>
@@ -24,5 +24,5 @@ export const Menu = () => {
         </li>
       </ul>
     </section>
-  )
-}
+  );
+};

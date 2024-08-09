@@ -22,6 +22,11 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'categoria',
         required: true,
+    },
+    tipo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'tipo',
+        required: true,
     }
 }, {
     timestamps: true

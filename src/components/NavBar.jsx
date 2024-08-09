@@ -3,9 +3,14 @@ import { Link } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import { useState } from "react";
 
-const NavBar = () => {
+const NavBar = ({ onFilterChange, marcas, categorias }) => {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
+
+  const handleFilterClick = (categoria, marca) => {
+    onFilterChange(categoria, marca);
+  };
+
   const content = <>
     <div className="lg:hidden z-50 block absolute top-64 w-full left-0 right-0 bg-slate-400 backdrop-blur-lg bg-opacity-30 transition">
       <ul className="text-center text-xl p-20">
@@ -44,37 +49,32 @@ const NavBar = () => {
     <nav className="z-50">
       <div className="h-[10vh] flex justify-between items-center px-4 py-4 lg:py-5 lg:px-10 border-b">
         <div className="hidden md:flex lg:flex flex-1 justify-center items-center font-normal">
-          <ul className="flex gap-8 text-[18px]">
-
-            {/* inicio sub-menu */}
-            <div className="group">
-              <button className="hover:text-slate-700 transition border-b-2 border-white hover:border-slate-700 cursor-pointer text-slate-700">Vestimenta</button>
+        <ul className="flex gap-8 text-[18px]">
+          {categorias.map(categoria => (
+            <div key={categoria._id} className="group">
+              <button className="hover:text-slate-700 transition border-b-2 border-white hover:border-slate-700 cursor-pointer text-slate-700">
+                {categoria.nombre}
+              </button>
               <div className="hidden group-hover:flex flex-col absolute left-0 p-10 w-full bg-white z-20 text-black duration-300">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-                  <div className="flex flex-col">
-                    <h3 className="mb-4 text-2xl text-slate-700">Wrangler</h3>
-                    <a href="" className="hover:underline hover:text-slate-700">Camisa</a>
-                    <a href="" className="hover:underline hover:text-slate-700">Pantalon</a>
-                    <a href="" className="hover:underline hover:text-slate-700">Remera</a>
-                    <a href="" className="hover:underline hover:text-slate-700">Abrigo</a>
-                  </div>
-                  <div className="flex flex-col">
-                    <h3 className="mb-4 text-2xl text-slate-700">Lee</h3>
-                    <a href="" className="hover:underline hover:text-slate-700">Camisa</a>
-                    <a href="" className="hover:underline hover:text-slate-700">Pantalon</a>
-                    <a href="" className="hover:underline hover:text-slate-700">Remera</a>
-                  </div>
+                  {marcas.map(marca => (
+                    <div key={marca._id} className="flex flex-col">
+                      <h3 className="mb-4 text-2xl text-slate-700">{marca.nombre}</h3>
+                      <Link 
+                        to="/*" 
+                        onClick={() => handleFilterClick(categoria._id, marca._id)} 
+                        className="hover:underline hover:text-slate-700"
+                      >
+                        Ver productos
+                      </Link>
+                    </div>
+                  ))}
                 </div>
-
               </div>
             </div>
-            {/* fin sub-menu */}
-
-            <Link to='/'>
-              <li className="hover:text-slate-700 transition border-b-2 border-white hover:border-slate-700 cursor-pointer">Accesorios</li>
-            </Link>
-          </ul>
-        </div>
+          ))}
+        </ul>
+      </div>
         <div>
           {click && content}
         </div>
