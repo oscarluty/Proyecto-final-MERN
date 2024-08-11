@@ -47,7 +47,7 @@ export const Header = () => {
         )}
         <li>
           <a
-            href="https://wa.me/595994881715?text=Hola%21%20vengo%20de%20la%20pagina%20web%20y%20quisiera%20hacer%20una%20consulta."
+            href="https://wa.me/595972194983?text=Hola%21%20vengo%20de%20la%20pagina%20web%20y%20quisiera%20hacer%20una%20consulta."
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -84,7 +84,7 @@ export const Header = () => {
               </Link>
             )}
             <a
-              href="https://wa.me/595994881715?text=Hola%21%20vengo%20de%20la%20pagina%20web%20y%20quisiera%20hacer%20una%20consulta."
+              href="https://wa.me/595972194983?text=Hola%21%20vengo%20de%20la%20pagina%20web%20y%20quisiera%20hacer%20una%20consulta."
               target="_blank"
               rel="noopener noreferrer"
               onClick={toggleMenu}

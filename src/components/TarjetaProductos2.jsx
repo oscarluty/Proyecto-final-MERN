@@ -4,7 +4,7 @@ import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 
 const Article = ({ imagen, nombre, descripcion, marca, _id }) => {
   const handleBuyClick = () => {
-    const phoneNumber = "595994881715";
+    const phoneNumber = "595972194983";
     const productUrl = `https://www.jeanvernier.com.py/product/${_id}`;
     
     const message = `Hola, tengo una pregunta sobre ${nombre}`;

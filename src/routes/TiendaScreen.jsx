@@ -9,7 +9,7 @@ import { CiMenuFries, CiCircleList  } from "react-icons/ci";
 
 const Article = ({ imagen, nombre, descripcion, _id }) => {
   const handleBuyClick = () => {
-    const phoneNumber = "595994881715";
+    const phoneNumber = "595972194983";
     const message = `Hola, tengo una pregunta sobre ${nombre}`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
